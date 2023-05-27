@@ -1,5 +1,4 @@
 @echo off
-
 REM source should be the path where the files are. 
 REM Be sure it ends with a backslash. Ex:  c:\plot_temp\
 SET source=c:\plot_temp\
@@ -19,7 +18,7 @@ REM main loop of program
 
 	IF NOT "%file%"=="" (
 		IF EXIST "%source%%file%" (
-			robocopy %source% %destination% %file% /MOV /MT:50 /ETA /TEE /UNILOG+:plotmover.log
+			robocopy %source% %destination% %file% /MOV /MT:50 /ETA /TEE /UNILOG+:filemover.log
 		) ELSE (
 			ECHO File does not exist.
 		)
