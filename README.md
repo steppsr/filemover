@@ -1,4 +1,4 @@
-# filemover
+![filemover](https://github.com/steppsr/filemover/blob/main/images/filemover_logo.png?raw=true)
 
 ## Description
 
@@ -34,5 +34,3 @@ filemover
 ## Running state
 
 The Batch script will continue to poll the folder endless if there isn't input from the user. It will check for a file, and if not found then wait 10 seconds before doing another search. During that 10 seconds you can hit the 'x' key to close the script.
-
-![filemover](https://github.com/steppsr/filemover/blob/main/images/filemover_logo.png?raw=true)
