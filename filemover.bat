@@ -11,6 +11,51 @@ SET destination=F:\testnet\plots\
 REM pattern is the wildcard search to get your files
 SET pattern=*.plot
 
+REM threads is the number of your systems threads you want to use remove the 'REM' from the 
+REM beginning of the line below to use threaded processes to move the files.
+SET threads=50
+
+REM If you want output display on the screen change the value below to a 'Y' instead of 'N'. 
+REM Note - This will cause the move to run slower.
+REM SET tee=Y
+SET tee=Y
+
+REM If you are move large files, answer 'Y' below to copy using unbuffered I/O
+REM SET unbuffered=N
+SET unbuffered=Y
+
+REM If you want to log to a file, remove the 'REM' below and set the filename for the log.
+REM SET logfile=filemove.log
+SET logfile=
+
+REM - END USER CONFIG
+
+
+
+REM ====================================================================================================
+REM ------------------------------- NO USER CONFIG CHANGES BELOW THIS LINE -----------------------------
+REM ====================================================================================================
+SET th=""
+IF NOT "%threads%"=="" (
+	SET th=/MT:%threads%
+)
+
+IF "%tee%"=="Y" (
+	SET tee=/TEE
+) ELSE (
+	SET tee=
+)
+
+IF "%unbuffered%"=="Y" (
+	SET ub=/J
+) ELSE (
+	SET ub=
+)
+
+IF NOT "%logfile%"=="" (
+	SET log=/UNILOG+:%logfile%
+)
+
 REM main loop of program
 :LOOP
 	SET file=""
@@ -18,7 +63,7 @@ REM main loop of program
 
 	IF NOT "%file%"=="" (
 		IF EXIST "%source%%file%" (
-			robocopy %source% %destination% %file% /MOV /MT:50 /ETA /TEE /UNILOG+:filemover.log
+			robocopy %source% %destination% %file% /MOV %th% %ub% /ETA %tee% %log%
 		) ELSE (
 			ECHO File does not exist.
 		)
@@ -35,16 +80,16 @@ GOTO :END
 
 REM pop will get one file matching the pattern provided
 :pop
-	setlocal enabledelayedexpansion
-	set "pattern=%1"
-	set "selectedFile="
-	for %%F in (%pattern%) do (
-		set "selectedFile=%%~nxF"
-		goto :BreakLoop
+	SETLOCAL ENABLEDELAYEDEXPANSION
+	SET "pattern=%1"
+	SET "selectedFile="
+	FOR %%F IN (%pattern%) DO (
+		SET "selectedFile=%%~nxF"
+		GOTO :BREAKLOOP
 	)
 
-	:BreakLoop
-	endlocal&set file=%selectedFile%
+	:BREAKLOOP
+	ENDLOCAL&SET file=%selectedFile%
 EXIT /B
 
 :END
